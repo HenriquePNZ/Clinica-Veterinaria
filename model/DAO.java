@@ -123,7 +123,15 @@ public abstract class DAO {
                     + "id_pet INTEGER); \n");
             executeUpdate(stmt);
             System.out.println("Table 'consulta' created successfully or already exists.");
-
+            
+            //table vacina:
+           stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS vacina( \n"
+                    + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
+                    + "medicacao VARCHAR, \n"
+                    + "dataVacinacao DATE, \n"
+                    + "lote VARCHAR, \n"
+                    + "dataReforco DATE, \n");
+            executeUpdate(stmt);            
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, "Error creating tables", ex);
