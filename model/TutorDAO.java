@@ -25,12 +25,12 @@ public class TutorDAO extends DAO {
     public Tutor create(String nome, String endereco, String telefone, String email) {
         try {
             PreparedStatement stmt = DAO.getConnection().prepareStatement(
-                "INSERT INTO tutor (nome, endereco, telefone, email) VALUES (?, ?, ?, ?)"
+                "INSERT INTO tutor (nome, telefone, email, endereco) VALUES (?, ?, ?, ?)"
             );
             stmt.setString(1, nome);
-            stmt.setString(2, endereco);
-            stmt.setString(3, telefone);
-            stmt.setString(4, email);
+            stmt.setString(2, telefone);
+            stmt.setString(3, email);
+            stmt.setString(4, endereco);
             executeUpdate(stmt);
             return this.retrieveById(lastId("tutor", "id"));
         } catch (SQLException ex) {
@@ -91,9 +91,9 @@ public class TutorDAO extends DAO {
                 "UPDATE tutor SET nome=?, endereco=?, telefone=?, email=? WHERE id=?"
             );
             stmt.setString(1, tutor.getNome());
-            stmt.setString(2, tutor.getEndereco());
-            stmt.setString(3, tutor.getTelefone());
-            stmt.setString(4, tutor.getEmail());
+            stmt.setString(2, tutor.getTelefone());
+            stmt.setString(3, tutor.getEmail());
+            stmt.setString(4, tutor.getEndereco());
             stmt.setInt(5, tutor.getId());
             executeUpdate(stmt);
         } catch (SQLException e) {

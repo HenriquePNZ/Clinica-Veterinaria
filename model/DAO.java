@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class DAO {
-    public static final String DBURL = "jdbc:h2:./clinica2024.db";
+    public static final String DBURL = "jdbc:h2:./clinicaAtualizado.db";
     private static Connection con;
     protected static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -78,60 +78,83 @@ public abstract class DAO {
     protected final boolean createTable() {
         try {
             PreparedStatement stmt;
+            
             // Table tutor:
-            stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS tutor( \n"
-                    + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
-                    + "nome VARCHAR(255), \n"
-                    + "telefone VARCHAR(20), \n"
-                    + "email VARCHAR(255), \n"
-                    + "endereco VARCHAR(255)); \n");
+            stmt = DAO.getConnection().prepareStatement(
+                "CREATE TABLE IF NOT EXISTS tutor( \n"
+                + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
+                + "nome VARCHAR(255), \n"
+                + "telefone VARCHAR(20), \n"
+                + "email VARCHAR(255), \n"
+                + "endereco VARCHAR(255)); \n"
+            );
             executeUpdate(stmt);
             System.out.println("Table 'tutor' created successfully or already exists.");
 
-            // Table pet:
-            stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS pet( \n"
-                    + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
-                    + "nome VARCHAR(255), \n"
-                    + "raca VARCHAR(100), \n"
-                    + "historicoPeso VARCHAR(255), \n"
-                    + "idade INTEGER, \n"
-                    + "sexo VARCHAR(10), \n"
-                    + "corPelagem VARCHAR(100), \n"
-                    + "estadoReprodutivo VARCHAR(100)); \n");
-            executeUpdate(stmt);
-            System.out.println("Table 'pet' created successfully or already exists.");
+                // Table pet:
+            stmt = DAO.getConnection().prepareStatement(
+            "CREATE TABLE IF NOT EXISTS pet( \n"
+            + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
+            + "nome VARCHAR(255), \n"
+            + "raca VARCHAR(100), \n"
+            + "historicoPeso VARCHAR(255), \n"
+            + "idade INTEGER, \n"
+            + "sexo VARCHAR(10), \n"
+            + "corPelagem VARCHAR(100), \n"
+            + "estadoReprodutivo VARCHAR(100), \n"  // Corrigido: adicionei vírgula aqui
+            + "especie VARCHAR(50), \n"              // Corrigido: adicionei aqui sem parênteses extras
+            + "tutor_id INT, \n"
+            + "FOREIGN KEY (tutor_id) REFERENCES tutor(id) \n"
+            + ");"  // Corrigido: coloco o ponto e vírgula aqui
+        );
+        executeUpdate(stmt);
+        System.out.println("Table 'pet' created successfully or already exists.");
+
 
             // Table vet:
-            stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS vet( \n"
-                    + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
-                    + "nome VARCHAR(255), \n"
-                    + "telefone VARCHAR(20), \n"
-                    + "email VARCHAR(255), \n"
-                    + "especialidade VARCHAR(100), \n"
-                    + "horariosDisponiveis VARCHAR(255)); \n");
+            stmt = DAO.getConnection().prepareStatement(
+                "CREATE TABLE IF NOT EXISTS vet( \n"
+                + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
+                + "nome VARCHAR(255), \n"
+                + "telefone VARCHAR(20), \n"
+                + "email VARCHAR(255), \n"
+                + "especialidade VARCHAR(100), \n"
+                + "horariosDisponiveis TIME \n"
+                + "); \n"
+            );
+
             executeUpdate(stmt);
             System.out.println("Table 'vet' created successfully or already exists.");
 
             // Table consulta:
-            stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS consulta( \n"
-                    + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
-                    + "data DATE, \n"
-                    + "horario TIME, \n"
-                    + "categoria VARCHAR(100), \n"
-                    + "id_tutor INTEGER, \n"
-                    + "id_veterinario INTEGER, \n"
-                    + "id_pet INTEGER); \n");
+            stmt = DAO.getConnection().prepareStatement(
+                "CREATE TABLE IF NOT EXISTS consulta( \n"
+                + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
+                + "data DATE, \n"
+                + "horario TIME, \n"
+                + "categoria VARCHAR(100), \n"
+                + "id_tutor INTEGER, \n"
+                + "id_veterinario INTEGER, \n"
+                + "id_pet INTEGER, \n"
+                + "FOREIGN KEY (id_tutor) REFERENCES tutor(id), \n"
+                + "FOREIGN KEY (id_veterinario) REFERENCES vet(id), \n"
+                + "FOREIGN KEY (id_pet) REFERENCES pet(id)); \n"
+            );
             executeUpdate(stmt);
             System.out.println("Table 'consulta' created successfully or already exists.");
+
+            // Table vacina:
+            stmt = DAO.getConnection().prepareStatement(
+                "CREATE TABLE IF NOT EXISTS vacina( \n"
+                + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
+                + "medicacao VARCHAR(255), \n"
+                + "dataVacinacao DATE, \n"
+                + "lote VARCHAR(100), \n"
+                + "dataReforco DATE); \n"
+            );
+            executeUpdate(stmt);
+            System.out.println("Table 'vacina' created successfully or already exists.");
             
-            //table vacina:
-           stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS vacina( \n"
-                    + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
-                    + "medicacao VARCHAR, \n"
-                    + "dataVacinacao DATE, \n"
-                    + "lote VARCHAR, \n"
-                    + "dataReforco DATE, \n");
-            executeUpdate(stmt);            
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, "Error creating tables", ex);

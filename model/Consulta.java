@@ -74,51 +74,5 @@ public class Consulta {
     public void setPet(Pet pet) {  // Novo setter
         this.pet = pet;
     }
-    
-    //MÉTODOS DA CLASSE
-    
-    public void agendarConsulta(Date novaData, Time novoHorario, String novaCategoria, Vet novoVet, Tutor novoTutor, Pet novoPet ){
-       this.data = novaData;
-       this.horario = novoHorario;
-       this.categoria = novaCategoria;
-       this.veterinario = novoVet;
-       this.tutor = novoTutor;
-       this.pet = novoPet;
-       
-    }
-    
-    public void alterarCategoria(String novaCategoria){
-        setCategoria(novaCategoria);
-        
-        System.out.println("Categoria alteada para: " + novaCategoria);
-    }
-    
-  public void cancelarConsulta(int consultaId) {
-        if (this.id == consultaId) { 
-            this.horario = null;
-            this.categoria = null;
-            this.tutor = null;
-            this.veterinario = null;
-            this.pet = null;
-            System.out.println("Consulta com ID " + consultaId + " foi cancelada com sucesso!");
-        } else {
-            System.out.println("Consulta com ID " + consultaId + " não encontrada.");
-        }
-    }
 
-    // Método para exibir detalhes da consulta
-    public void exibirDetalhesConsulta() {
-        if (this.data == null || this.horario == null) {
-            System.out.println("Nenhuma consulta agendada.");
-        } else {
-            System.out.println("Detalhes da Consulta:");
-            System.out.println("ID da Consulta: " + id);
-            System.out.println("Data: " + data);
-            System.out.println("Horário: " + horario);
-            System.out.println("Categoria: " + categoria);
-            System.out.println("Veterinário: " + veterinario.getNome());
-            System.out.println("Tutor: " + tutor.getNome());
-            System.out.println("Pet: " + pet.getNome());
-        }
-    }
 }

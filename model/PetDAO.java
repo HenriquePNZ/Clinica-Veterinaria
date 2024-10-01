@@ -22,10 +22,10 @@ public class PetDAO extends DAO {
     }
 
     // Create
-    public Pet create(String nome, String raca, List<Double> historicoPeso, int idade, String sexo, String corPelagem, String estadoReprodutivo, Tutor tutor) {
+    public Pet create(String nome, String raca, List<Double> historicoPeso, int idade, String sexo, String corPelagem, String estadoReprodutivo, String especie, Tutor tutor) {
         try {
             PreparedStatement stmt = DAO.getConnection().prepareStatement(
-                "INSERT INTO pet (nome, raca, historicoPeso, idade, sexo, corPelagem, estadoReprodutivo, tutor_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO pet (nome, raca, historicoPeso, idade, sexo, corPelagem, estadoReprodutivo, especie, tutor_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)"
             );
             stmt.setString(1, nome);
             stmt.setString(2, raca);
@@ -33,8 +33,9 @@ public class PetDAO extends DAO {
             stmt.setInt(4, idade);
             stmt.setString(5, sexo);
             stmt.setString(6, corPelagem);
-            stmt.setString(7, estadoReprodutivo);  
-            stmt.setInt(8, tutor.getId());
+            stmt.setString(7, estadoReprodutivo);
+            stmt.setString(8, especie);  
+            stmt.setInt(9, tutor.getId());
             executeUpdate(stmt);
             return this.retrieveById(lastId("pet", "id"));
         } catch (SQLException ex) {
@@ -56,6 +57,7 @@ public class PetDAO extends DAO {
                 rs.getString("sexo"),
                 rs.getString("corPelagem"),
                 rs.getString("estadoReprodutivo"), 
+                rs.getString("especie"),
                 TutorDAO.getInstance().retrieveById(rs.getInt("tutor_id"))
             );
         } catch (SQLException e) {
@@ -103,7 +105,7 @@ public class PetDAO extends DAO {
     public void update(Pet pet) {
         try {
             PreparedStatement stmt = DAO.getConnection().prepareStatement(
-                "UPDATE pet SET nome=?, raca=?, historicoPeso=?, idade=?, sexo=?, corPelagem=?, estadoReprodutivo=?, tutor_id=? WHERE id=?"
+                "UPDATE pet SET nome=?, raca=?, historicoPeso=?, idade=?, sexo=?, corPelagem=?, estadoReprodutivo=?, especie=?, tutor_id=? WHERE id=?"
             );
             stmt.setString(1, pet.getNome());
             stmt.setString(2, pet.getRaca());
@@ -112,8 +114,9 @@ public class PetDAO extends DAO {
             stmt.setString(5, pet.getSexo());
             stmt.setString(6, pet.getCorPelagem());
             stmt.setString(7, pet.getEstadoReprodutivo());
-            stmt.setInt(8, pet.getTutor().getId());
-            stmt.setInt(9, pet.getId());
+            stmt.setString(8, pet.getEspecie());
+             stmt.setInt(9, pet.getTutor().getId());
+            stmt.setInt(10, pet.getId());
             executeUpdate(stmt);
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());

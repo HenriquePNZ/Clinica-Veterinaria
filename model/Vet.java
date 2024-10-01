@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.sql.Time;
+
 /**
  *
  * @author Hpanz
@@ -15,10 +17,10 @@ public class Vet {
     private String telefone;
     private String email;
     private String especialidade;
-    private String horariosDisponiveis;
+    private Time horariosDisponiveis;
 
 
-    public Vet(int id, String nome, String telefone, String email, String especialidade, String horariosDisponiveis){
+    public Vet(int id, String nome, String telefone, String email, String especialidade, Time horariosDisponiveis){
         this.id = id;
         this.nome = nome;
         this.telefone = telefone;  
@@ -63,27 +65,11 @@ public class Vet {
         this.especialidade = especialidade;
     }
 
-    public String getHorariosDisponiveis() {
+    public Time getHorariosDisponiveis() {
         return horariosDisponiveis;
     }
 
-    public void setHorariosDisponiveis(String horariosDisponiveis) {
+    public void setHorariosDisponiveis(Time horariosDisponiveis) {
         this.horariosDisponiveis = horariosDisponiveis;
-    }
-    
-    //MÉTODOS DA CLASSE
-    
-    public String atualizarTelefone(String novoTelefone){
-        setTelefone(novoTelefone);
-        return "Endereco atualizado para: " + novoTelefone;
-      
-    }
-    
-    public String exibirEspecialidade(){
-        return "Especialidade do veterinário: " + this.especialidade;
-    }
-    
-    public void exibirHorariosDisponiveis(){
-        System.out.println("Horários disponíveis: " + getHorariosDisponiveis());
     }
 }
